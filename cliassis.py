@@ -3,6 +3,20 @@ import urllib
 import json as m_json
 import os
 import webbrowser
+#from twisted.internet import reactor
+#from twisted.internet import protocol
+
+#commented out for later implementation
+
+##class MyProcessProtocol(protocol.ProcessProtocol):
+#	def __init_(self, text):
+#		self.text = text
+		
+#	def connectionMade(self):
+#		self.transport.write(self.text)
+#		self.transport.closeStdin()
+		
+	
 
 #define the start function to set directry and commands
 def start():
@@ -58,6 +72,7 @@ def start():
 	f.write(lis+"\n") #Line 5
 	f.close()
 
+#processProtocol = MyProcessProtocol()
 
 #define main function
 def command():
@@ -85,7 +100,9 @@ def command():
 	if openf.rstrip('\n') in command:
 		query = command.replace("open ", "") #remove precursor
 		pgrm = "%s%s.lnk" % (directory.rstrip('\n'), query) #join directory and program name
-		os.system(pgrm) #execute
+		os.startfile(pgrm)
+#		reactor.spawnProcess(processProtocol, pgrm) #execute
+#		reactor.run()
 		
 	#replace all data in data.txt with nil
 	if "wipe cache" in command:
