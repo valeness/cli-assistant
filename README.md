@@ -34,33 +34,33 @@ I would have to type "google tony stark". However, these commands are set by you
 Current Command/Config File Explanations
 
 [directories]
-#This directory is where you stick all your "program.lnk" shortcuts.
+//This directory is where you stick all your "program.lnk" shortcuts.
 shortcut_directory = C:\shortcuts 
 
 [commands]
-#Edit this to choose the google command that will google search within your terminal and
-#return the top 4 results complete with titles and full urls
+//Edit this to choose the google command that will google search within your terminal and
+//return the top 4 results complete with titles and full urls
 google_command = google
-#This command will launch google.com and automatically search your query.
+//This command will launch google.com and automatically search your query.
 google_browser = browse
-#This command does the same thing as google_browser, but uses duckduckgo search.
+//This command does the same thing as google_browser, but uses duckduckgo search.
 duck_browser = duck
-#This is the precursor command to opening files from your shorcut_directory. Make sure you only type the name of the file
-#and not the extension. The program takes care of appending the '.lnk' and everything. So if I had a shortcut 'chrome.lnk'
-#I would type 'open chrome' and it would take care of everything.
+//This is the precursor command to opening files from your shorcut_directory. Make sure you only type the name of the file
+//and not the extension. The program takes care of appending the '.lnk' and everything. 
+//So if I had a shortcut 'chrome.lnk' I would type 'open chrome' and it would take care of everything.
 open_file = open
-#Use this command to list what programs are in your shortcut_directory
+//Use this command to list what programs are in your shortcut_directory
 list_shortcuts = list
-#This isn't a precursor command. Just type 'blog' and it will initiate a function to email your
-#blog address to post via email
+//This isn't a precursor command. Just type 'blog' and it will initiate a function to email your
+//blog address to post via email
 blog_command = blog
 
 [email]
-#Your email
+//Your email
 your_email = example@example.com
-#The special email to post to your blog
+//The special email to post to your blog
 blog_email = blog@example.com
-#The address you have to visit in order for your blog to 'check' for emails and post them. 
+//The address you have to visit in order for your blog to 'check' for emails and post them. 
 blog_mail_url = yourdomain.com/blog/wp-mail.php
 
 
