@@ -4,6 +4,9 @@ import json as m_json
 import os
 import webbrowser
 import random
+from lxml import etree
+import time
+import datetime
 import ConfigParser
 #actual sending function
 import smtplib
@@ -24,6 +27,9 @@ blog = config.get('commands', 'blog_command')
 sender = config.get('email', 'your_email')
 receiver = config.get('email', 'blog_email')
 weburl = config.get('email', 'blog_mail_url')
+journal = config.get('commands', 'journal')
+search = 'search'
+joke = 'joke'
 
 #define main function
 def command():
@@ -86,6 +92,20 @@ def command():
 		
 	if blog in command:
 		post()
+		
+	if journal in command:
+		document, article = write()
+		
+	if 'search' in command:
+		post = open('postf.txt', 'r')
+		postf = str(post.read())
+		
+		root = etree.fromstring(postf)
+		
+		articles = root.xpath('//article[contains(@tags, "test")]')
+				
+		for article in articles:
+			print etree.tostring(article, pretty_print=True)
 	
 	#create array for possible quit commands
 	shut = {'shut', 'quit', 'stop', 'kill', 'exit', 'close'}
@@ -105,27 +125,6 @@ def command():
 	elif "kill" in command:
 		quit()
 
-#check to see if data.txt contains any data
-#if it doesn't, call start() to assign variables
-#if it does, continue
-
-#read variables from data.txt to be useable outside the start function
-#and then reassign them
-f = open('data.txt', 'r')
-lines = f.readlines()
-directory = lines[0].rstrip('\n')
-google = lines[1].rstrip('\n')
-searchbrowser = lines[2].rstrip('\n')
-duckbrowser = lines[3].rstrip('\n')
-openf = lines[4].rstrip('\n')
-lis = lines[5].rstrip('\n')
-joke = lines[6].rstrip('\n')
-blog = lines[7].rstrip('\n')
-sender = lines[8].rstrip('\n')
-receiver = lines[9].rstrip('\n')
-weburl = lines[10].rstrip('\n')
-
-f.close()
 
 #show the user what his/her custom commands are
 print "Directory: [%s]" % directory.rstrip('\n')
@@ -161,14 +160,14 @@ jokes = [joke1, joke2]
 tries = 0
 
 def post():
-	post = open('post.txt', 'w')
+	post = open('mail.txt', 'w')
 	title = raw_input('title>>')
 	while 1:
 		message = raw_input('>>')
 		post.write(message + '\n')
 		
 		if '[done]' in message:
-			post = open('post.txt', 'r')
+			post = open('mail.txt', 'r')
 			msg = MIMEText(post.read())
 			post.close
 			
@@ -194,8 +193,42 @@ def post():
 				break
 			elif 'no' in send:
 				break
-		
+
+def write():
+		ts = time.time()
+		st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+	
+		post = open('post.txt', 'w')
+		document = etree.Element('document')
+		title = raw_input('title>>')
+	
+		while 1:
+			message = raw_input('post>>')
+			post.write(message + '\n')
+			if '[done]' in message:
+				tags = raw_input('tags>>')
+				break
 			
+			
+
+		post = open('post.txt', 'r')
+		postf = post.read()
+
+		article = etree.SubElement(document, 'article', title=title, date=st, tags=tags)
+		article.text = postf
+		
+		post.close()
+	
+		with open('postf.txt', 'a') as file:
+			file.write(etree.tostring(article, pretty_print=True) + '\n')
+			file.close()
+			
+		return document, article
+
+			
+def email():
+	pass
+
 #loop forever
 #will ask for another command after one executes; infinitely
 #will break if error occurs
