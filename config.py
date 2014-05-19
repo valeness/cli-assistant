@@ -16,6 +16,7 @@ config.set('commands', 'blog_command', 'blog')
 config.set('email', 'your_email', 'example@example.com')
 config.set('email', 'blog_email', 'blog@example.com')
 config.set('email', 'blog_mail_url', 'yourdomain.com/blog/wp-content.php')
+config.set('commands', 'journal', 'write')
 
 with open('config.cfg', 'wb') as configfile:
 	config.write(configfile)
