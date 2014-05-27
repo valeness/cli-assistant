@@ -1,5 +1,6 @@
 #import necessary modules
 import urllib
+import language
 import json as m_json
 import os
 import webbrowser
@@ -12,6 +13,7 @@ import ConfigParser
 import smtplib
 #import the email modules
 from email.mime.text import MIMEText
+import language
 
 config = ConfigParser.RawConfigParser()
 config.read('config.cfg')
@@ -28,8 +30,11 @@ sender = config.get('email', 'your_email')
 receiver = config.get('email', 'blog_email')
 weburl = config.get('email', 'blog_mail_url')
 journal = config.get('commands', 'journal')
-search = 'search'
+search = config.get('commands', 'search_journal')
+word = config.get('language', 'keyword_context')
+add = config.get('commands', 'add_nickname')
 joke = 'joke'
+nick = 'add'
 
 #define main function
 def command():
@@ -96,17 +101,32 @@ def command():
 	if journal in command:
 		document, article = write()
 		
-	if 'search' in command:
-		post = open('postf.txt', 'r')
+	if search in command:
+		query = command.replace(search + ' ', "") #remove precursor
+		post = open('journal.txt', 'r')
 		postf = str(post.read())
 		
 		root = etree.fromstring(postf)
 		
-		articles = root.xpath('//article[contains(@tags, "test")]')
+		articles = root.xpath('//article[contains(@tags, "%s")]' % query)
 				
 		for article in articles:
 			print etree.tostring(article, pretty_print=True)
+			
+	if word in command:
+		language.language()	
 	
+	if nick in command:
+		site = raw_input('website>>')
+		name = raw_input('nickname>>')
+		nickdic[site] = name
+		
+	if add in command:
+		name = raw_input('name>>')
+		url = raw_input('url>>')
+		config.set('nicknames', name, url)
+		print 'Done!'
+		
 	#create array for possible quit commands
 	shut = {'shut', 'quit', 'stop', 'kill', 'exit', 'close'}
 	
@@ -219,12 +239,11 @@ def write():
 		
 		post.close()
 	
-		with open('postf.txt', 'a') as file:
+		with open('journal.xml', 'a') as file:
 			file.write(etree.tostring(article, pretty_print=True) + '\n')
 			file.close()
 			
 		return document, article
-
 			
 def email():
 	pass
